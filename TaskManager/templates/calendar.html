@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Calendar</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static',
+          filename='css/dashboard.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <h2>🎓 Student Task Manager</h2>
+
+        <ul>
+
+            <li><a href="/dashboard">🏠 Dashboard</a></li>
+
+            <li><a href="/tasks">📚 Tasks</a></li>
+
+            <li><a href="/students">👨‍🎓 Students</a></li>
+
+            <li><a href="/calendar">📅 Calendar</a></li>
+
+            <li><a href="/analytics">📊 Analytics</a></li>
+
+            <li><a href="/attendance">Attendance</a></li>
+
+            <li><a href="/files">📂 Files</a></li>
+
+            <li><a href="/reports">📄 Reports</a></li>
+
+            <li><a href="/profile">👤 Profile</a></li>
+
+            <li><a href="/logout">🚪 Logout</a></li>
+
+        </ul>
+
+    </div>
+
+    <!-- MAIN CONTENT -->
+
+    <div class="main-content">
+
+        <h1>
+            📅 Calendar
+        </h1>
+
+        <h2>
+            Month {{ month }} / {{ year }}
+        </h2>
+
+        <table class="calendar-table">
+
+            <tr>
+
+                <th>Mon</th>
+                <th>Tue</th>
+                <th>Wed</th>
+                <th>Thu</th>
+                <th>Fri</th>
+                <th>Sat</th>
+                <th>Sun</th>
+
+            </tr>
+
+            {% for week in cal %}
+
+            <tr>
+
+                {% for day in week %}
+
+                <td>
+
+                    {% if day != 0 %}
+
+                        {{ day }}
+
+                    {% endif %}
+
+                </td>
+
+                {% endfor %}
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+        <div class="task-table">
+
+            <h2>
+                Upcoming Task Deadlines
+            </h2>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Title</th>
+
+                        <th>Subject</th>
+
+                        <th>Priority</th>
+
+                        <th>Due Date</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for task in tasks %}
+
+                    <tr>
+
+                        <td>
+                            {{ task.title }}
+                        </td>
+
+                        <td>
+                            {{ task.subject }}
+                        </td>
+
+                        <td>
+                            {{ task.priority }}
+                        </td>
+
+                        <td>
+                            {{ task.due_date }}
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

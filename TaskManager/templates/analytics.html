@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Analytics</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static',
+          filename='css/dashboard.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <h2>🎓 Student Task Manager</h2>
+
+        <ul>
+
+            <li><a href="/dashboard">🏠 Dashboard</a></li>
+
+            <li><a href="/tasks">📚 Tasks</a></li>
+
+            <li><a href="/students">👨‍🎓 Students</a></li>
+
+            <li><a href="/calendar">📅 Calendar</a></li>
+
+            <li><a href="/analytics">📊 Analytics</a></li>
+
+             <li><a href="/attendance">Attendance</a></li>
+
+            <li><a href="/files">📂 Files</a></li>
+
+            <li><a href="/reports">📄 Reports</a></li>
+
+            <li><a href="/profile">👤 Profile</a></li>
+
+            <li><a href="/logout">🚪 Logout</a></li>
+
+        </ul>
+
+    </div>
+
+    <!-- MAIN CONTENT -->
+
+    <div class="main-content">
+
+        <h1>📊 Analytics Dashboard</h1>
+
+        <!-- STAT CARDS -->
+
+        <div class="cards">
+
+            <div class="card">
+
+                <h2>{{ total_tasks }}</h2>
+
+                <p>Total Tasks</p>
+
+            </div>
+
+            <div class="card">
+
+                <h2>{{ completed_tasks }}</h2>
+
+                <p>Completed Tasks</p>
+
+            </div>
+
+            <div class="card">
+
+                <h2>{{ pending_tasks }}</h2>
+
+                <p>Pending Tasks</p>
+
+            </div>
+
+        </div>
+
+        <!-- PRIORITY SECTION -->
+
+        <div class="analytics-box">
+
+            <h2>Priority Statistics</h2>
+
+            <br>
+
+            <p>🔴 High Priority Tasks:
+                {{ high_priority }}
+            </p>
+
+            <br>
+
+            <p>🟠 Medium Priority Tasks:
+                {{ medium_priority }}
+            </p>
+
+            <br>
+
+            <p>🟢 Low Priority Tasks:
+                {{ low_priority }}
+            </p>
+
+        </div>
+
+        <!-- PROGRESS SECTION -->
+
+        <div class="analytics-box">
+
+            <h2>Completion Overview</h2>
+
+            <br>
+
+            {% if total_tasks|default(0) > 0 %}
+
+                <p>
+
+                    Completion Rate:
+
+                    {{ ((completed_tasks /
+                    total_tasks) * 100)
+                    | round(2) }}%
+
+                </p>
+
+            {% else %}
+
+                <p>
+
+                    No Tasks Available
+
+                </p>
+
+            {% endif %}
+
+        </div>
+
+        <!-- CHARTS SECTION -->
+
+        <div class="charts-container">
+
+            <div class="chart-card">
+
+             <h2>Task Completion Chart</h2>
+
+             <canvas id="taskChart"></canvas>
+
+            </div>
+
+            <div class="chart-card">
+
+                <h2>Task Priority Chart</h2>
+  
+                <canvas id="priorityChart"></canvas>
+
+            </div>
+
+            <div class="chart-card">
+
+                <h2>Attendance Analytics</h2>
+
+                <canvas id="attendanceChart"></canvas>
+  
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+    const taskCtx =
+      document.getElementById(
+      'taskChart'
+    );
+
+    new Chart(taskCtx, {
+
+        type: 'pie',
+
+        data: {
+
+            labels: [
+
+              'Completed',
+              'Pending'
+
+            ],
+
+            datasets: [{
+
+                data: [
+
+                   {{ completed_tasks }},
+                   {{ pending_tasks }}
+
+                ],
+
+                backgroundColor: [
+
+                   '#00ff88',
+                   '#ff4444'
+
+                ]
+ 
+            }]
+
+        }
+
+    });
+
+
+    const priorityCtx =
+      document.getElementById(
+      'priorityChart'
+    );
+
+    new Chart(priorityCtx, {
+
+       type: 'bar',
+  
+         data: {
+
+            labels: [
+
+              'High',
+              'Medium',
+               'Low'
+            ],
+
+            datasets: [{
+
+               label: 'Tasks',
+
+                data: [
+
+                   {{ high_priority }},
+                   {{ medium_priority }},
+                   {{ low_priority }}
+
+                ],
+
+                backgroundColor: [
+
+                   '#ff4444',
+                   '#ffaa00',
+                   '#00ff88'
+ 
+                ]
+
+            }]
+
+        }
+
+    });
+
+
+    const attendanceCtx =
+      document.getElementById(
+      'attendanceChart'
+    );
+
+    new Chart(attendanceCtx, {
+
+        type: 'pie',
+ 
+        data: {
+
+            labels: [
+
+              'Present',
+              'Absent'
+
+            ],
+
+            datasets: [{
+
+                data: [
+
+                   {{ present_students }},
+                   {{ absent_students }}
+
+                ],
+
+                backgroundColor: [
+
+                   '#00ff88',
+                   '#ff4444'
+
+                ]
+
+            }]
+
+        }
+
+    });
+
+</script>
+
+</body>
+
+</html>

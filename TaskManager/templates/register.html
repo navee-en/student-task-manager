@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Register</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="auth-container">
+
+    <div class="left-panel">
+
+        <h1>🎓 Student Task Manager</h1>
+
+        <p>
+            Create your account to manage tasks,
+            attendance, analytics and reports.
+        </p>
+
+    </div>
+
+    <div class="right-panel">
+
+        <div class="form-box">
+
+            <h2>Create Account</h2>
+
+            <form action="/create-account" method="POST">
+
+                <input type="text"
+                       name="username"
+                       placeholder="Username"
+                       required>
+
+                <input type="email"
+                       name="email"
+                       placeholder="Email"
+                       required>
+
+                <input type="text"
+                       name="department"
+                       placeholder="Department"
+                       required>
+
+                <input type="text"
+                       name="course"
+                       placeholder="Course"
+                       required>
+                       
+                       <select name="role">
+                            <option value="Student">
+                              Student
+                            </option>
+
+                            <option value="Teacher">
+                              Teacher
+                            </option>
+
+                        </select>
+
+
+                <input type="password"
+                       name="password"
+                       placeholder="Password"
+                       required>
+
+                <button type="submit">
+                    Register
+                </button>
+
+
+            </form>
+
+            <p>
+                Already have an account?
+                <a href="/login">Login Here</a>
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

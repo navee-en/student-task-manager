@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Tasks</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static',
+          filename='css/dashboard.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <h2>🎓 Student Task Manager</h2>
+
+        <ul>
+
+            <li><a href="/dashboard">🏠 Dashboard</a></li>
+
+            <li><a href="/tasks">📚 Tasks</a></li>
+
+            <li><a href="/students">👨‍🎓 Students</a></li>
+
+            <li><a href="/calendar">📅 Calendar</a></li>
+
+            <li><a href="/analytics">📊 Analytics</a></li>
+
+            <li><a href="/files">📂 Files</a></li>
+
+            <li><a href="/reports">📄 Reports</a></li>
+
+            <li><a href="/profile">👤 Profile</a></li>
+
+            <li><a href="/logout">🚪 Logout</a></li>
+
+        </ul>
+
+    </div>
+
+    <!-- MAIN CONTENT -->
+
+    <div class="main-content">
+
+        <h1>📚 Task Management</h1>
+
+        <!-- ADD TASK FORM -->
+
+        <div class="task-form">
+
+           <h2>Search & Filter Tasks</h2>
+
+           <form method="GET"
+                action="/tasks">
+
+                <input
+                   type="text"
+                   name="search"
+                   placeholder="Search Task">
+
+                <select name="subject">
+
+                    <option value="">
+                       All Subjects
+                    </option>
+
+                    {% for subject in subjects %}
+
+                    <option
+                        value="{{ subject[0] }}">
+
+                        {{ subject[0] }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+                <button type="submit">
+
+                  Search
+
+                </button>
+
+            </form>
+
+    
+            <h2>Add New Task</h2>
+
+            <form action="/add-task"
+                  method="POST">
+
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="Task Title"
+                    required>
+
+                <input
+                    type="text"
+                    name="subject"
+                    placeholder="Subject"
+                    required>
+
+                <textarea
+                    name="description"
+                    placeholder="Task Description"
+                    rows="4">
+                </textarea>
+
+                <select name="priority">
+
+                    <option value="High">
+                        High
+                    </option>
+
+                    <option value="Medium">
+                        Medium
+                    </option>
+
+                    <option value="Low">
+                        Low
+                    </option>
+
+                </select>
+
+                <input
+                    type="date"
+                    name="due_date"
+                    required>
+
+                <button type="submit">
+
+                    Add Task
+
+                </button>
+
+            </form>
+
+        </div>
+
+
+
+        <!-- TASK TABLE -->
+
+        <div class="task-table">
+
+            <h2>All Tasks</h2>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Title</th>
+
+                        <th>Subject</th>
+
+                        <th>Priority</th>
+
+                        <th>Status</th>
+
+                        <th>Progress</th>
+
+                        <th>Due Date</th>
+
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for task in tasks %}
+
+                    <tr>
+
+                        <td>
+                            {{ task.id }}
+                        </td>
+
+                        <td>
+                            {{ task.title }}
+                        </td>
+
+                        <td>
+                            {{ task.subject }}
+                        </td>
+
+                        <td>
+
+                            {% if task.priority == 'High' %}
+
+                                🔴 High
+
+                            {% elif task.priority == 'Medium' %}
+
+                                🟠 Medium
+
+                            {% else %}
+
+                                🟢 Low
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+                            {{ task.status }}
+                        </td>
+
+                        <td>
+        
+
+                          <div class="progress-container">
+
+                                <div class="progress-fill"
+                                    style=width: {{ task.progress }}%;">
+
+                                  {{ task.progress }}%
+
+                                </div>
+
+                            </div>
+
+                        </td>
+        
+
+                        <td>
+                            {{ task.due_date }}
+                        </td>
+
+                        <td>
+
+                            <a href="/complete-task/{{ task.id }}"
+                               class="complete-btn">
+
+                                Complete
+
+                            </a>
+
+                            <a href="/edit-task/{{ task.id }}"
+                               class="edit-btn">
+
+                                Edit
+
+                            </a>
+
+                            <a href="/delete-task/{{ task.id }}"
+                               class="delete-btn">
+
+                                Delete
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
