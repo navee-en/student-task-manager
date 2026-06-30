@@ -355,10 +355,10 @@ Add screenshots of:
 B.Sc Computer Science (Cybersecurity)
 
 GitHub:
-https://github.com/yourusername
+https://github.com/naveen-en
 
 LinkedIn:
-https://linkedin.com/in/yourprofile
+https://linkedin.com/in/Naveen E
 
 ---
 
