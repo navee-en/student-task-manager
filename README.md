@@ -358,7 +358,7 @@ GitHub:
 https://github.com/navee-en
 
 LinkedIn:
-https://linkedin.com/in/Naveen.E
+https://www.linkedin.com/in/naveen-e-a988343b4?utm_source=share_via&utm_content=profile&utm_medium=member_android
 
 ---
 
