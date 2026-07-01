@@ -717,33 +717,40 @@ def files():
     )
 
 #---------------------UPLOADS-------------------------#
-@app.route('/upload',methods=['POST'])
+@app.route('/upload', methods=['POST'])
 def upload():
 
-  file = request.files['file']
+    file = request.files['file']
 
-  filename = secure_filename(file.filename)
+    if file.filename == "":
+        return "No file selected"
 
-  s3.upload_fileobj(
-     file,
-     S3_BUCKET,
-     f"uploads/{filename}"
-  )
+    filename = secure_filename(file.filename)
 
-  file_url = f"https://{S3_BUCKET}.s3.amazonaws.com/uploads/{filename}"
-   
+    # Upload to AWS S3
+    s3.upload_fileobj(
+        file,
+        S3_BUCKET,
+        f"uploads/{filename}"
+    )
 
-        new_file = File(
-            filename=filename,
-            uploaded_by=session['user_id'],
-            upload_date=date.today()
-        )
+    # Generate file URL
+    file_url = f"https://{S3_BUCKET}.s3.amazonaws.com/uploads/{filename}"
 
-        db.session.add(new_file)
-        db.session.commit()
+    # Save file information in the database
+    new_file = File(
+        filename=filename,
+        uploaded_by=session['user_id'],
+        upload_date=date.today()
+        # If your File model has a column like file_url or file_path,
+        # add:
+        # file_url=file_url
+    )
+
+    db.session.add(new_file)
+    db.session.commit()
 
     return redirect('/files')
-
 #------------------------ DOWNLOAD THE REPORT----------------#
 @app.route('/download/<filename>')
 def download(filename):
