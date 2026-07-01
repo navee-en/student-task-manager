@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Files</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static',
+          filename='css/dashboard.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="sidebar">
+
+        <h2>🎓 Student Task Manager</h2>
+
+        <ul>
+
+            <li><a href="/dashboard">🏠 Dashboard</a></li>
+
+            <li><a href="/tasks">📚 Tasks</a></li>
+
+            <li><a href="/attendance">📅 Attendance</a></li>
+
+            <li><a href="/analytics">📊 Analytics</a></li>
+
+            <li><a href="/attendance">Attendance</a></li>
+
+            <li><a href="/files">📂 Files</a></li>
+
+            <li><a href="/reports">📄 Reports</a></li>
+
+            <li><a href="/profile">👤 Profile</a></li>
+
+            <li><a href="/logout">🚪 Logout</a></li>
+
+        </ul>
+
+    </div>
+
+    <div class="main-content">
+
+        <h1>📂 File Management</h1>
+
+        <div class="task-form">
+
+            <h2>Upload File</h2>
+
+            <form action="/upload"
+                  method="POST"
+                  enctype="multipart/form-data">
+
+                <input
+                    type="file"
+                    name="file"
+                    required>
+
+                <button type="submit">
+
+                    Upload File
+
+                </button>
+
+            </form>
+
+        </div>
+
+        <br>
+
+        <div class="task-table">
+
+            <h2>Uploaded Files</h2>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Filename</th>
+
+                        <th>Uploaded Date</th>
+
+                        <th>Download</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for file in files %}
+
+                    <tr>
+
+                        <td>
+                            {{ file.id }}
+                        </td>
+
+                        <td>
+                            {{ file.filename }}
+                        </td>
+
+                        <td>
+                            {{ file.upload_date }}
+                        </td>
+
+                        <td>
+
+                            <a href="/download/{{ file.filename }}"
+                               class="edit-btn">
+
+                                Download
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
