@@ -1,7 +1,0 @@
-Flask
-Flask-SQLAlchemy
-Werkzeug
-pandas
-openpyxl
-reportlab
-gunicorn
