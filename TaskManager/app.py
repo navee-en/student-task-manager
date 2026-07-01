@@ -196,6 +196,10 @@ class File(db.Model):
         nullable=False
     )
 
+    file_url = db.column(
+        db.string(500)
+    )
+
     uploaded_by = db.Column(
         db.Integer,
         db.ForeignKey('user.id')
