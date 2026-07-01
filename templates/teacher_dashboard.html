@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Teacher Dashboard</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static',
+filename='css/dashboard.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="sidebar">
+
+<h2>👨‍🏫 Teacher Panel</h2>
+
+<ul>
+
+<li><a href="/teacher">🏠 Dashboard</a></li>
+
+<li><a href="/tasks">📚 Manage Tasks</a></li>
+
+<li><a href="/attendance">📅 Attendance</a></li>
+
+<li><a href="/analytics">📊 Analytics</a></li>
+
+<li><a href="/reports">📄 Reports</a></li>
+
+<li><a href="/profile">👤 Profile</a></li>
+
+<li><a href="/logout">🚪 Logout</a></li>
+
+</ul>
+
+</div>
+
+<div class="main-content">
+
+<h1>Teacher Dashboard</h1>
+
+<div class="cards">
+
+<div class="card">
+
+<h2>{{ total_students }}</h2>
+
+<p>Total Students</p>
+
+</div>
+
+<div class="card">
+
+<h2>{{ total_tasks }}</h2>
+
+<p>Total Tasks</p>
+
+</div>
+
+<div class="card">
+
+<h2>{{ completed_tasks }}</h2>
+
+<p>Completed Tasks</p>
+
+</div>
+
+<div class="card">
+
+<h2>{{ pending_tasks }}</h2>
+
+<p>Pending Tasks</p>
+
+</div>
+
+</div>
+
+<br>
+
+<div class="analytics-box">
+
+<h2>Teacher Functions</h2>
+
+<br>
+
+<p>✔ Assign Tasks</p>
+
+<p>✔ View Student Progress</p>
+
+<p>✔ Mark Attendance</p>
+
+<p>✔ Generate Reports</p>
+
+<p>✔ Analytics Dashboard</p>
+
+<p>✔ Upload Study Materials</p>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

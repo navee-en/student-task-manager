@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static',
+          filename='css/dashboard.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <h2>🎓 Student Task Manager</h2>
+
+        <ul>
+
+            <li>
+                <a href="/dashboard">
+                    🏠 Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="/tasks">
+                    📚 Tasks
+                </a>
+            </li>
+
+            <li>
+                <a href="/students">
+                    👨‍🎓 Students
+                </a>
+            </li>
+
+            <li>
+                <a href="/calendar">
+                    📅 Calendar
+                </a>
+            </li>
+
+            <li>
+                <a href="/analytics">
+                    📊 Analytics
+                </a>
+            </li>
+
+            <li>
+                <a href="/attendance">
+                    Attendance
+                </a>
+            </li>
+
+            <li>
+                <a href="/files">
+                    📂 Files
+                </a>
+            </li>
+
+            <li>
+                <a href="/reports">
+                    📄 Reports
+                </a>
+            </li>
+
+            <li>
+                <a href="/profile">
+                    👤 Profile
+                </a>
+            </li>
+
+            <li>
+                <a href="/logout">
+                    🚪 Logout
+                </a>
+            </li>
+
+        </ul>
+
+    </div>
+
+    <!-- MAIN CONTENT -->
+
+    <div class="main-content">
+
+        <h1>
+            Welcome,
+            {{ session.username }}
+        </h1>
+
+        <div class="progress-section">
+
+            <div class="progress-card">
+
+                <h2>Task Completion</h2>
+
+                <br>
+
+                <div class="progress-ring"
+                    style="--progress:
+                    {{ completion_percentage * 3.6 }}deg;">
+
+                    <div class="progress-inner">
+
+                      {{ completion_percentage }}%
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>                   
+
+        <!-- STATISTICS -->
+
+        <div class="cards">
+
+            <div class="card">
+
+                <h2>{{ total_tasks }}</h2>
+
+                <p>Total Tasks</p>
+
+            </div>
+
+            <div class="card">
+
+                <h2>{{ completed_tasks }}</h2>
+
+                <p>Completed Tasks</p>
+
+            </div>
+
+            <div class="card">
+
+                <h2>{{ pending_tasks }}</h2>
+
+                <p>Pending Tasks</p>
+
+            </div>
+
+            <div class="card">
+
+                <h2>{{ student_count }}</h2>
+
+                <p>Students</p>
+
+            </div>
+
+        </div>
+
+        <!-- PROGRESS SECTION -->
+
+        <div class="analytics-box">
+
+            <h2>
+                Overall Progress
+            </h2>
+
+            <br>
+
+            <h1>
+                {{ completion_percentage }}%
+            </h1>
+
+            <p>
+                Task Completion Rate
+            </p>
+
+        </div>
+
+        <!-- QUICK ACTIONS -->
+
+        <div class="task-form">
+
+            <h2>Quick Navigation</h2>
+
+            <br>
+
+            <a href="/tasks">
+                <button>
+                    Manage Tasks
+                </button>
+            </a>
+
+            <br><br>
+
+            <a href="/analytics">
+                <button>
+                    View Analytics
+                </button>
+            </a>
+
+            <br><br>
+
+            <a href="/reports">
+                <button>
+                    View Reports
+                </button>
+            </a>
+
+        </div>
+
+        <!-- RECENT ACTIVITY -->
+
+        <div class="analytics-box">
+
+            <h2>
+                Recent Activity
+            </h2>
+
+            <br>
+
+            <p>
+                ✔ Login Successful
+            </p>
+
+            <p>
+                ✔ Dashboard Loaded
+            </p>
+
+            <p>
+                ✔ Ready to Manage Tasks
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
