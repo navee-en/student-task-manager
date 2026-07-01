@@ -11,9 +11,19 @@ import pandas as pd
 from flask import send_file
 from flask import send_from_directory
 from reportlab.pdfgen import canvas
+import boto3
+
 
 
 app = Flask(__name__)
+
+# ===========================
+# AWS S3 Configuration
+# ===========================
+
+S3_BUCKET = "student-task-manager-navee"   # Replace with your bucket name
+
+s3 = boto3.client("s3")
 
 app.secret_key = "studenttaskmanager"
 
@@ -710,20 +720,18 @@ def files():
 @app.route('/upload',methods=['POST'])
 def upload():
 
-    file = request.files['file']
+  file = request.files['file']
 
-    if file:
+  filename = secure_filename(file.filename)
 
-        filename = secure_filename(
-            file.filename
-        )
+  s3.upload_fileobj(
+     file,
+     S3_BUCKET,
+     f"uploads/{filename}"
+  )
 
-        file.save(
-            os.path.join(
-                app.config['UPLOAD_FOLDER'],
-                filename
-            )
-        )
+  file_url = f"https://{S3_BUCKET}.s3.amazonaws.com/uploads/{filename}"
+   
 
         new_file = File(
             filename=filename,
@@ -740,11 +748,16 @@ def upload():
 @app.route('/download/<filename>')
 def download(filename):
 
-    return send_from_directory(
-        app.config['UPLOAD_FOLDER'],
-        filename,
-        as_attachment=True
-    )
+     url = s3.generate_presigned_url(
+         'get_object',
+         Params={
+            'Bucket': S3_BUCKET,
+            'Key': f"uploads/{filename}"
+         },
+         ExpiresIn=3600
+     )
+
+     return redirect(url)
 
 #-------------PDF REPORT ROUTE--------------#
 
