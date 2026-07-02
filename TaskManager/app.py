@@ -713,34 +713,37 @@ def files():
 @app.route('/upload', methods=['POST'])
 def upload():
 
-    print("=== UPLOAD ROUTE HIT ===")
-
-    if 'file' not in request.files:
-        print("NO FILE FOUND IN REQUEST")
-        return "No file"
-
-    file = request.files['file']
-
-    print("FILE NAME:", file.filename)
-
-    if file.filename == "":
-        print("EMPTY FILE")
-        return "Empty file"
-
-    filename = secure_filename(file.filename)
-    s3_key = f"uploads/{filename}"
-
-    print("BUCKET:", S3_BUCKET)
-    print("KEY:", s3_key)
+    print("🔥 UPLOAD ROUTE HIT")
 
     try:
-        s3.upload_fileobj(file, S3_BUCKET, s3_key)
-        print("UPLOAD SUCCESS TO S3")
-    except Exception as e:
-        print("S3 ERROR:", str(e))
-        return str(e)
+        print("FILES:", request.files)
 
-    return "UPLOAD DONE"
+        file = request.files.get('file')
+
+        if file is None:
+            print("❌ FILE IS NONE")
+            return "No file received"
+
+        print("📄 FILE NAME:", file.filename)
+
+        if file.filename == "":
+            print("❌ EMPTY FILENAME")
+            return "Empty file"
+
+        filename = secure_filename(file.filename)
+        s3_key = f"uploads/{filename}"
+
+        print("⬆️ Uploading to S3:", S3_BUCKET, s3_key)
+
+        s3.upload_fileobj(file, S3_BUCKET, s3_key)
+
+        print("✅ S3 UPLOAD SUCCESS")
+
+        return "UPLOAD SUCCESS"
+
+    except Exception as e:
+        print("❌ ERROR:", str(e))
+        return str(e)
 #------------------------ DOWNLOAD THE REPORT----------------#
 @app.route('/download/<filename>')
 def download(filename):
