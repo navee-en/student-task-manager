@@ -713,37 +713,43 @@ def files():
 @app.route('/upload', methods=['POST'])
 def upload():
 
-    print("🔥 UPLOAD ROUTE HIT")
-
     try:
-        print("FILES:", request.files)
+        print("UPLOAD ROUTE HIT")
+
+        # CHECK SESSION SAFELY
+        user_id = session.get('user_id')
+
+        if not user_id:
+            return "User not logged in", 401
 
         file = request.files.get('file')
 
-        if file is None:
-            print("❌ FILE IS NONE")
-            return "No file received"
-
-        print("📄 FILE NAME:", file.filename)
-
-        if file.filename == "":
-            print("❌ EMPTY FILENAME")
-            return "Empty file"
+        if not file or file.filename == "":
+            return "No file selected", 400
 
         filename = secure_filename(file.filename)
         s3_key = f"uploads/{filename}"
 
-        print("⬆️ Uploading to S3:", S3_BUCKET, s3_key)
-
+        # UPLOAD TO S3
         s3.upload_fileobj(file, S3_BUCKET, s3_key)
 
-        print("✅ S3 UPLOAD SUCCESS")
+        print("S3 UPLOAD DONE")
+
+        # SAVE TO DB
+        new_file = File(
+            filename=filename,
+            uploaded_by=user_id,
+            upload_date=date.today()
+        )
+
+        db.session.add(new_file)
+        db.session.commit()
 
         return "UPLOAD SUCCESS"
 
     except Exception as e:
-        print("❌ ERROR:", str(e))
-        return str(e)
+        print("UPLOAD ERROR:", str(e))
+        return str(e), 500
 #------------------------ DOWNLOAD THE REPORT----------------#
 @app.route('/download/<filename>')
 def download(filename):
