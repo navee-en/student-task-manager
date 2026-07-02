@@ -724,29 +724,26 @@ def files():
 @app.route('/upload', methods=['POST'])
 def upload():
 
+    if 'user_id' not in session:
+        return "User not logged in", 401
+
     file = request.files['file']
-
-    print("FILE RECEIVED:", file.filename)
-
-    if file.filename == "":
-        return "No file selected"
-
     filename = secure_filename(file.filename)
 
-    s3_key = f"uploads/{filename}"
+    s3.upload_fileobj(
+        file,
+        S3_BUCKET,
+        f"uploads/{filename}"
+    )
 
-    print("UPLOADING TO S3 KEY:", s3_key)
+    new_file = File(
+        filename=filename,
+        uploaded_by=session['user_id'],
+        upload_date=date.today()
+    )
 
-    try:
-        s3.upload_fileobj(
-            file,
-            S3_BUCKET,
-            s3_key
-        )
-        print("UPLOAD SUCCESS")
-    except Exception as e:
-        print("UPLOAD FAILED:", str(e))
-        return str(e)
+    db.session.add(new_file)
+    db.session.commit()
 
     return "Upload successful"
 #------------------------ DOWNLOAD THE REPORT----------------#
