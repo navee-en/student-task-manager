@@ -739,6 +739,8 @@ def upload():
         upload_date=date.today()
     )
 
+    print("SESSION DATA:", dict(session))
+
     db.session.add(new_file)
     db.session.commit()
 
