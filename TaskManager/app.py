@@ -714,26 +714,22 @@ def files():
 def upload():
 
     try:
-        print("UPLOAD START")
+        file = request.files.get('file')
+
+        if not file:
+            return "No file", 400
 
         user_id = session.get('user_id')
 
         if not user_id:
             return "Login required", 401
 
-        file = request.files.get('file')
-
-        if not file:
-            return "No file", 400
-
         filename = secure_filename(file.filename)
 
-        s3.upload_fileobj(
-            file,
-            S3_BUCKET,
-            f"uploads/{filename}"
-        )
+        # Upload to S3
+        s3.upload_fileobj(file, S3_BUCKET, f"uploads/{filename}")
 
+        # Save in DB
         new_file = File(
             filename=filename,
             uploaded_by=user_id,
@@ -746,8 +742,7 @@ def upload():
         return "UPLOAD SUCCESS"
 
     except Exception as e:
-        print("ERROR:", str(e))
-        return str(e)
+        return str(e), 500
 #------------------------ DOWNLOAD THE REPORT----------------#
 @app.route('/download/<filename>')
 def download(filename):
