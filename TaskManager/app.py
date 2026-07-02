@@ -303,9 +303,6 @@ def login():
 
         session['user_id'] = user.id
         session['role'] = user.role
-
-        if user.role == "Admin":
-            return redirect('admin') 
         
         elif user.role == "Teacher":
             return redirect('/teacher')
