@@ -285,33 +285,25 @@ def create_account():
 # ======================
 # LOGIN
 # ======================
-
 @app.route('/authenticate', methods=['POST'])
 def login():
 
     username = request.form['username']
     password = request.form['password']
 
-    user = User.query.filter_by(
-        username=username
-    ).first()
+    user = User.query.filter_by(username=username).first()
 
-    if user and check_password_hash(
-        user.password,
-        password
-    ):
+    if user and check_password_hash(user.password, password):
 
         session['user_id'] = user.id
         session['role'] = user.role
-        
-        elif user.role == "Teacher":
-            return redirect('/teacher')
 
+        if user.role == "Teacher":
+            return redirect('/teacher')
         else:
-         return redirect('/dashboard')
+            return redirect('/dashboard')
 
     return "Invalid Login"
-
 # ======================
 # DASHBOARD
 # ======================
