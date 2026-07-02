@@ -726,35 +726,29 @@ def upload():
 
     file = request.files['file']
 
+    print("FILE RECEIVED:", file.filename)
+
     if file.filename == "":
         return "No file selected"
 
     filename = secure_filename(file.filename)
 
-    # Upload to AWS S3
-    s3.upload_fileobj(
-        file,
-        S3_BUCKET,
-        f"uploads/{filename}"
-    )
+    s3_key = f"uploads/{filename}"
 
-    # Generate file URL
-    file_url = f"https://{S3_BUCKET}.s3.amazonaws.com/uploads/{filename}"
+    print("UPLOADING TO S3 KEY:", s3_key)
 
-    # Save file information in the database
-    new_file = File(
-        filename=filename,
-        uploaded_by=session['user_id'],
-        upload_date=date.today()
-        # If your File model has a column like file_url or file_path,
-        # add:
-        # file_url=file_url
-    )
+    try:
+        s3.upload_fileobj(
+            file,
+            S3_BUCKET,
+            s3_key
+        )
+        print("UPLOAD SUCCESS")
+    except Exception as e:
+        print("UPLOAD FAILED:", str(e))
+        return str(e)
 
-    db.session.add(new_file)
-    db.session.commit()
-
-    return redirect('/files')
+    return "Upload successful"
 #------------------------ DOWNLOAD THE REPORT----------------#
 @app.route('/download/<filename>')
 def download(filename):
