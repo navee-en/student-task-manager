@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+    <style>
+        .profile-card {
+            max-width: 760px;
+            padding: 28px;
+            border-radius: 16px;
+        }
+
+        .profile-photo {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #8b5cf6;
+            margin-bottom: 12px;
+        }
+
+        .profile-form {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .profile-form .field {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .profile-form input,
+        .profile-form select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 11px;
+            border-radius: 8px;
+        }
+
+        .profile-form .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .profile-form button {
+            padding: 12px 18px;
+            border: 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .profile-message {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .profile-form {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <div class="sidebar">
+        <h2>🎓 Student Task Management System</h2>
+        <ul>
+            <li><a href="/dashboard">🏠 Dashboard</a></li>
+            <li><a href="/tasks">📚 Tasks</a></li>
+            <li><a href="/students">👨‍🎓 Students</a></li>
+            <li><a href="/calendar">📅 Calendar</a></li>
+            <li><a href="/analytics">📊 Analytics</a></li>
+            <li><a href="/attendance">Attendance</a></li>
+            <li><a href="/files">📂 Files</a></li>
+            <li><a href="/reports">📄 Reports</a></li>
+            <li><a href="/profile">👤 Profile</a></li>
+            <li><a href="/logout">🚪 Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <h1>👤 My Profile</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="profile-message">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <div class="card profile-card">
+            <div style="text-align: center;">
+                {% if profile_image_url %}
+                    <img class="profile-photo"
+                         src="{{ profile_image_url }}"
+                         alt="Profile picture">
+                {% else %}
+                    <div class="profile-photo"
+                         style="display:inline-flex; align-items:center;
+                                justify-content:center; font-size:42px;">
+                        👤
+                    </div>
+                {% endif %}
+
+                <h2>{{ user.username }}</h2>
+                <p>{{ user.role }}</p>
+            </div>
+
+            <form class="profile-form"
+                  action="{{ url_for('profile') }}"
+                  method="POST"
+                  enctype="multipart/form-data">
+
+                <div class="field full-width">
+                    <label for="profile_picture">Profile Picture</label>
+                    <input type="file"
+                           id="profile_picture"
+                           name="profile_picture"
+                           accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+                    <small>JPG, PNG or WebP; maximum 3 MB.</small>
+                </div>
+
+                <div class="field">
+                    <label>Username</label>
+                    <input type="text"
+                           value="{{ user.username }}"
+                           readonly>
+                </div>
+
+                <div class="field">
+                    <label>Email ID</label>
+                    <input type="email"
+                           value="{{ user.email }}"
+                           readonly>
+                </div>
+
+                <div class="field">
+                    <label>Department</label>
+                    <input type="text"
+                           value="{{ user.department or '' }}"
+                           readonly>
+                </div>
+
+                <div class="field">
+                    <label>Course</label>
+                    <input type="text"
+                           value="{{ user.course or '' }}"
+                           readonly>
+                </div>
+
+                {% if user.role == 'Student' %}
+
+                    <div class="field full-width">
+                        <h3>🎓 Academic Details</h3>
+                    </div>
+
+                    <div class="field">
+                        <label for="registration_number">
+                            Registration Number
+                        </label>
+                        <input type="text"
+                               id="registration_number"
+                               name="registration_number"
+                               maxlength="50"
+                               value="{{ user.registration_number or '' }}">
+                    </div>
+
+                    <div class="field">
+                        <label for="semester">Current Semester</label>
+                        <select id="semester" name="semester">
+                            <option value="">Select semester</option>
+                            {% for number in range(1, 9) %}
+                                <option value="{{ number }}"
+                                    {% if user.semester|string == number|string %}
+                                        selected
+                                    {% endif %}>
+                                    Semester {{ number }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="field full-width">
+                        <label for="academic_year">Academic Year</label>
+                        <input type="text"
+                               id="academic_year"
+                               name="academic_year"
+                               placeholder="Example: 2026-2027"
+                               maxlength="20"
+                               value="{{ user.academic_year or '' }}">
+                    </div>
+
+                {% elif user.role == 'Teacher' %}
+
+                    <div class="field full-width">
+                        <h3>👨‍🏫 Faculty Details</h3>
+                    </div>
+
+                    <div class="field">
+                        <label for="faculty_id">Faculty ID</label>
+                        <input type="text"
+                               id="faculty_id"
+                               name="faculty_id"
+                               maxlength="50"
+                               value="{{ user.faculty_id or '' }}">
+                    </div>
+
+                    <div class="field">
+                        <label for="designation">Designation</label>
+                        <input type="text"
+                               id="designation"
+                               name="designation"
+                               placeholder="e.g. Assistant Professor"
+                               maxlength="100"
+                               value="{{ user.designation or '' }}">
+                    </div>
+
+                    <div class="field full-width">
+                        <label for="qualification">
+                            Academic Qualification
+                        </label>
+                        <input type="text"
+                               id="qualification"
+                               name="qualification"
+                               placeholder="e.g. M.Sc. Computer Science, Ph.D."
+                               maxlength="150"
+                               value="{{ user.qualification or '' }}">
+                    </div>
+
+                {% elif user.role == 'Admin' %}
+
+                    <div class="field full-width">
+                        <h3>🛡️ Administrator Account</h3>
+                        <p>Role: {{ user.role }}</p>
+                    </div>
+
+                {% endif %}
+
+                <div class="field full-width">
+                    <button type="submit">💾 Save Profile</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

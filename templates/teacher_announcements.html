@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Teacher Announcements</title>
+</head>
+<body>
+    <h1>Send Student Announcement</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endwith %}
+
+    <form method="POST">
+        <label>Recipients</label>
+        <select name="recipient_mode" id="recipient_mode">
+            <option value="all">All students</option>
+            <option value="selected">Selected students</option>
+        </select>
+
+        <div id="student-list" hidden>
+            <p>Select students:</p>
+            {% for student in students %}
+                <label>
+                    <input type="checkbox"
+                           name="student_ids"
+                           value="{{ student.id }}">
+                    {{ student.username }} ({{ student.email }})
+                </label>
+                <br>
+            {% endfor %}
+        </div>
+
+        <p>
+            <label>Subject</label>
+            <input name="subject" maxlength="200" required>
+        </p>
+
+        <p>
+            <label>Message</label>
+            <textarea name="body" maxlength="10000"
+                      rows="8" required></textarea>
+        </p>
+
+        <button type="submit">Send Announcement</button>
+    </form>
+
+    <p><a href="{{ url_for('teacher') }}">Back to Teacher Dashboard</a></p>
+
+    <script>
+        const mode = document.getElementById("recipient_mode");
+        const list = document.getElementById("student-list");
+
+        function updateRecipientList() {
+            list.hidden = mode.value !== "selected";
+        }
+
+        mode.addEventListener("change", updateRecipientList);
+        updateRecipientList();
+    </script>
+</body>
+</html>

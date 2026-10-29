@@ -1,0 +1,177 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+
+    background:#050505;
+
+    color:white;
+
+    height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+}
+
+.auth-container{
+
+    width:900px;
+
+    display:flex;
+
+    overflow:hidden;
+
+    border-radius:25px;
+
+    background:#111;
+
+    box-shadow:
+    0 0 20px #8a2be2,
+    0 0 40px #8a2be2;
+}
+
+.left-panel{
+
+    flex:1;
+
+    padding:50px;
+
+    background:linear-gradient(
+    135deg,
+    #1a1a1a,
+    #2b0a3d
+    );
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+}
+
+.left-panel h1{
+
+    color:white;
+
+    margin-bottom:15px;
+}
+
+.left-panel p{
+
+    color:#ccc;
+}
+
+.right-panel{
+
+    flex:1;
+
+    padding:40px;
+}
+
+.form-box{
+
+    margin-bottom:35px;
+}
+
+.form-box{
+
+    width:100%;
+
+    max-width:500px;
+
+    margin:auto;
+
+}
+
+input,
+select{
+
+    width:100%;
+
+    padding:12px;
+
+    margin-bottom:15px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#222;
+
+    color:white;
+}
+
+button{
+
+    width:100%;
+
+    padding:12px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#8a2be2;
+
+    color:white;
+
+    cursor:pointer;
+}
+
+button:hover{
+
+    opacity:0.9;
+}
+
+h2{
+
+    margin-bottom:20px;
+
+    color:white;
+
+}
+
+a{
+
+    color:#8a2be2;
+
+    text-decoration:none;
+
+}
+
+a:hover{
+
+    text-decoration:underline;
+
+}
+
+.progress-container{
+
+    width:120px;
+
+    background:#222;
+
+    border-radius:15px;
+
+    overflow:hidden;
+}
+
+.progress-fill{
+
+    background:#8a2be2;
+
+    color:white;
+
+    text-align:center;
+
+    padding:5px;
+
+    min-width:30px;
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Assign Task</title>
+</head>
+<body>
+    <h1>Assign Task to Student</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endwith %}
+
+    <form method="POST">
+        <label>Student</label>
+        <select name="student_id" required>
+            <option value="">Select a student</option>
+            {% for student in students %}
+                <option value="{{ student.id }}">
+                    {{ student.username }} — {{ student.email }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <p>
+            <label>Task title</label>
+            <input name="title" maxlength="200" required>
+        </p>
+
+        <p>
+            <label>Subject</label>
+            <input name="subject" maxlength="100">
+        </p>
+
+        <p>
+            <label>Description</label>
+            <textarea name="description"></textarea>
+        </p>
+
+        <p>
+            <label>Priority</label>
+            <select name="priority" required>
+                <option>Low</option>
+                <option selected>Medium</option>
+                <option>High</option>
+            </select>
+        </p>
+
+        <p>
+            <label>Deadline</label>
+            <input type="date" name="due_date" required>
+        </p>
+
+        <button type="submit">Assign Task and Notify Student</button>
+    </form>
+
+    <p><a href="{{ url_for('teacher') }}">Back to Teacher Dashboard</a></p>
+</body>
+</html>
